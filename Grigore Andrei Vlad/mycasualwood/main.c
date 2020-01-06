@@ -1,92 +1,115 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#define MAX 7
+#define MAX_TITLE 50
+#define ACTORS 10
+#define MAX 60
+#define Max_length 100
 
 typedef struct
 {
-    char *movie;
-    char *name;
-} actors;
-void initializeActor(actors *a)
-{
-    a->movie=(char*)malloc(sizeof(char)*100);
-    a->name=(char*)malloc(sizeof(char)*100);
-}
+    char *title;
+    char **cast;
+    int movieCount;
+} Hollywood;
 
-
-void readMovies(char *strbuf)
+void initializeMovies(Hollywood *movie)
 {
-    FILE *f=fopen("movies.txt","r");
-    char *p=(char*)malloc(sizeof(char)*100);
-    while(fgets(strbuf,100,f)!=NULL)
+    movie->title=(char*)malloc(sizeof(char)*MAX_TITLE);
+    movie->cast=(char**)malloc(sizeof(char*)*ACTORS);
+    for(int i=0;i<ACTORS;i++)
     {
-        p=strtok(strbuf,",");
-        puts(p);
+        movie->cast[i]=(char*)malloc(sizeof(char)*MAX);
     }
-    fclose(f);
-
 }
-void printFriends(actors *a,char *actor,int *friends)
+
+int isActorInMovie(char *actorName, Hollywood *movie, int count, int i)
 {
-    FILE *f=fopen("movies.txt","r");
-    int i=0,j;
-    char *p=(char*)malloc(sizeof(char*)*100);
-    char *strbuf=(char*)malloc(sizeof(char*)*100);
-    while(fgets(strbuf,100,f)!=NULL)
+    int ok=0;
+    for(int j=0; j<movie[i].movieCount && ok==0; j++)
     {
-        char *movie=strtok(strbuf,",");
-        p=strtok(NULL,",");
-        while(p!=NULL)
+        if(strcmp(actorName,movie[i].cast[j])==0)
+            ok=1;
+    }
+    return ok;
+}
+void displayFriends(char *actorName, Hollywood *movie, int count)
+{
+    printf("The friends of %s are:\n",actorName);
+    for(int i=0; i<count; i++)
+    {
+        if(isActorInMovie(actorName,movie,count,i)!=0)
         {
-            if(i==0)
+            for(int j=0; j<movie[i].movieCount; j++)
             {
-                initializeActor(&a[i]);
-                strcpy(a[i].movie,movie);
-                strcpy(a[i].name,p);
-                i++;
-            }
-        }
-        for(i=0; i<MAX; i++)
-        {
-            if(strcmp(a[i].name,actor)==0)
-            {
-                friends[i]=0;
-                for(j=0; j<MAX; j++)
+                if(strcmp(movie[i].cast[j],actorName)!=0)
                 {
-                    if(strstr(a[i].movie,a[j].movie)!=NULL&&i!=j)
-                    {
-                        printf("\n%s",a[j].name);
-                        friends[i]++;
-                    }
+                    printf("%s\n",movie[i].cast[j]);
                 }
             }
-            printf("\n%d",friends[i]);
-
         }
-
-
-
-
-
-
     }
-    fclose(f);
-
 }
+
+void findMaxFriends(Hollywood *movie,int *maxFriends, char *maxName,char *actorName, int count)
+{
+    int nrOfFriends;
+    for(int i=0; i<count; i++)
+    {
+        for(int j=0; j<movie[i].movieCount; j++)
+        {
+            strcpy(actorName,movie[i].cast[j]);
+            nrOfFriends=0;
+            for(int k=0; k<count; k++)
+            {
+                if(isActorInMovie(actorName,movie,count,k)!=0)
+                {
+                    nrOfFriends+=movie[k].movieCount-1;
+                }
+            }
+            if(nrOfFriends>*maxFriends)
+                    {
+                        *maxFriends=nrOfFriends;
+                        strcpy(maxName,actorName);
+                    }
+        }
+    }
+}
+
 int main()
 {
-
-    actors *a=(actors*)malloc(sizeof(actors)*100);
-    char *strbuf=(char*)malloc(sizeof(char)*100);
-    char*actor=(char*)malloc(sizeof(char)*100);
-    int *friends=(int*)malloc(sizeof(int)*30);
-    readMovies(strbuf);
-    printf("Enter name of the actor:");
-    gets(actor);
-    printFriends(a,actor,friends);
-
-
-
+    FILE *f=fopen("movies.txt","r");
+    Hollywood *movie=(Hollywood*)malloc(sizeof(Hollywood)*MAX);
+    for(int i=0;i<MAX;i++)
+    {
+        initializeMovies(&movie[i]);
+    }
+    char *strbuf=(char*)malloc(sizeof(char)*Max_length);
+    int count=0;
+    while(fgets(strbuf,Max_length,f)!=NULL)
+    {
+        char *p;
+        p=strtok(strbuf,",");
+        strcpy(movie[count].title,p);
+        puts(movie[count].title);
+        movie[count].movieCount=0;
+        p=strtok(NULL,",");
+        while(p)
+        {
+            strcpy(movie[count].cast[movie[count].movieCount],p);
+            puts(movie[count].cast[movie[count].movieCount]);
+            movie[count].movieCount++;
+            p=strtok(NULL,",");
+        }
+        count++;
+    }
+    char *actorName=(char*)malloc(sizeof(char)*MAX);
+    gets(actorName);
+    displayFriends(actorName,movie,count);
+    char* maxName=(char*)malloc(sizeof(char)*MAX);
+    int maxFriends=0;
+    findMaxFriends(movie,&maxFriends,maxName,actorName,count);
+    printf("\nMost popular actor is %s. He has %d friends\n",maxName,maxFriends);
+    fclose(f);
     return 0;
 }

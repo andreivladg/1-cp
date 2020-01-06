@@ -1,5 +1,4 @@
-
-Lord of the Rings,Sean Bean, Viggo Mortensen,Christopher Lee,Elijah Wood
+Lord of the Rings,Sean Bean,Viggo Mortensen,Christopher Lee,Elijah Wood
 Harry Potter,Daniel Radcliffe,Rupert Grint,Emma Watson,Michael Gambon
 The Book of Eli,Michael Gambon,Mila Kunis,Gary Oldman,Denzel Washington
 Hugo,Christopher Lee,Ben Kingsley,Chloe Grace Moretz
