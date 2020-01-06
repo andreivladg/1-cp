@@ -6,4 +6,4 @@ typedef struct
     char *owner;
     char *color;
     char *number;
-} car;
+} garage;

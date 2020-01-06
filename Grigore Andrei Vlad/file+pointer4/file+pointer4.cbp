@@ -32,6 +32,7 @@
 			<Add option="-Wall" />
 		</Compiler>
 		<Unit filename="cars.h" />
+		<Unit filename="garage.txt" />
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
 		</Unit>

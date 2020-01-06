@@ -1,11 +1,10 @@
 # depslib dependency file v1.0
-1577115998 source:c:\users\aa\desktop\cp\1-cp\grigore andrei vlad\file+pointer4\main.c
+1578090691 source:c:\users\aa\desktop\cp\1-cp\grigore andrei vlad\file+pointer4\main.c
 	<stdio.h>
 	<stdlib.h>
-	"cars.h"
 	<string.h>
 
-1577115196 c:\users\aa\desktop\cp\1-cp\grigore andrei vlad\file+pointer4\cars.h
+1578062014 c:\users\aa\desktop\cp\1-cp\grigore andrei vlad\file+pointer4\cars.h
 	<stdio.h>
 	<stdlib.h>
 
